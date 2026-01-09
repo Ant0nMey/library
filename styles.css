@@ -1,0 +1,39 @@
+body {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 4fr;
+    height: 100vh;
+}
+
+/*  HEADER  */
+header {
+    grid-column: 2 / 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*  ASIDE  */
+aside {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+aside div {
+    display: flex;
+    flex-direction: column;
+}
+
+aside form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/*  MAIN  */
+
+main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+}
