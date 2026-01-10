@@ -25,57 +25,35 @@ function formData() {
   }
 }
 
-function creationDivLivre (nodeParent) {
-  // TITRE DIV
+function creationDivCarte (className, nomLabel, bookPropertie) {
   const titre = document.createElement("div");
-  titre.className = "titreCarte";
+  titre.className = className;
     const titreLabel = document.createElement("h1");
-    titreLabel.textContent = "Titre";
+    titreLabel.textContent = nomLabel;
     const titreInput = document.createElement("div")
     titreInput.className = "carteInput";
-    titreInput.textContent = book.titre;
+    titreInput.textContent = bookPropertie;
   titre.appendChild(titreLabel);
   titre.appendChild(titreInput);
+  return titre;
+}
 
+function creationCarte (nodeParent) {
+   // TITRE DIV
+  const titreCarte = creationDivCarte("titreCarte", "Titre", book.titre);
   // AUTHEUR DIV
-  const autheur = document.createElement("div");
-  autheur.className = "autheurCarte";
-    const autheurLabel = document.createElement("h1");
-    autheurLabel.textContent = "Autheur";
-    const autheurInput = document.createElement("div")
-    autheurInput.className = "carteInput"
-    autheurInput.textContent = book.autheur;
-  autheur.appendChild(autheurLabel);
-  autheur.appendChild(autheurInput);
-
+  const autheurCarte = creationDivCarte("autheurCarte", "Autheur", book.autheur);
   // ANNEE PUBLICATION DIV
-  const release = document.createElement("div");
-  release.className = "releaseCarte";
-    const releaseLabel = document.createElement("h1");
-    releaseLabel.textContent = "Année publication";
-    const releaseInput = document.createElement("div")
-    releaseInput.className = "carteInput"
-    releaseInput.textContent = book.release;
-  release.appendChild(releaseLabel);
-  release.appendChild(releaseInput);
-
-  // GENRE
-  const genre = document.createElement("div");
-  genre.className = "genreCarte";
-    const genreLabel = document.createElement("h1");
-    genreLabel.textContent = "Genre";
-    const genreInput = document.createElement("div")
-    genreInput.className = "carteInput"
-    genreInput.textContent = book.genre;
-  genre.appendChild(genreLabel);
-  genre.appendChild(genreInput);
-
+  const releaseCarte = creationDivCarte("releaseCarte", "Année publication", book.release);
+  // GENRE DIV
+  const genreCarte = creationDivCarte("genreCarte", "Genre", book.genre);
+  // CARTE FINALE
   const node = document.createElement("div")
   node.className = "livreCarte";
-  node.appendChild(titre);
-  node.appendChild(autheur);
-  node.appendChild(release);
-  node.appendChild(genre);
+  node.appendChild(titreCarte);
+  node.appendChild(autheurCarte);
+  node.appendChild(releaseCarte);
+  node.appendChild(genreCarte);
   node.setAttribute("id", book.id);
   nodeParent.appendChild(node);
 }
@@ -89,7 +67,7 @@ function afficherLivre() {
       }
       else {
       // Si le livre n'est pas affiché, on créé sa div et on l'affiche dans main.
-        creationDivLivre(main);
+        creationCarte(main);
       }
     };
 };
