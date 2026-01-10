@@ -1,8 +1,13 @@
+:root {
+    --grey: rgb(238, 238, 238);
+}
+
 body {
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 250px 5fr;
     grid-template-rows: 1fr 4fr;
     height: 100vh;
+    font-family: 'Roboto';
 }
 
 /*  HEADER  */
@@ -11,6 +16,11 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+header > div.title {
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 /*  ASIDE  */
@@ -23,6 +33,7 @@ aside {
 aside div {
     display: flex;
     flex-direction: column;
+    gap: 5px;
 }
 
 aside form {
@@ -34,6 +45,35 @@ aside form {
 /*  MAIN  */
 
 main {
+    background-color: var(--grey);
+}
+
+main > div {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap : 50px;
+    padding: 50px;
+}
+
+/* CARTE */
+
+.livreCarte {
+    background-color: white;
+    border-radius: 15px;
+    max-width: 500px;
+    padding: 20px;
+    box-shadow: 5px 5px 10px rgb(218, 218, 218);
+}
+
+h1 {
+    font-size: 1rem;
+}
+
+.carteInput {
+    box-sizing: border-box;
+    background-color: var(--grey);
+    border-radius: 5px;
+    padding: 10px;
+    max-width: 50%;
+    overflow: auto;
 }
