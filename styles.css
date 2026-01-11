@@ -5,7 +5,7 @@
 body {
     display: grid;
     grid-template-columns: 250px 5fr;
-    grid-template-rows: 1fr 4fr;
+    grid-template-rows: 100px 4fr;
     height: 100vh;
     font-family: 'Roboto';
 }
@@ -27,18 +27,19 @@ header > div.title {
 aside {
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 aside div {
     display: flex;
     flex-direction: column;
     gap: 5px;
+
 }
 
 aside form {
     display: flex;
     flex-direction: column;
+    position: fixed;
     gap: 30px;
 }
 
@@ -63,10 +64,19 @@ main > div {
     max-width: 500px;
     padding: 20px;
     box-shadow: 5px 5px 10px rgb(218, 218, 218);
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    gap: 30px;
+}
+
+.livreCarte:hover {
+    transform: translate(0, -5px);
 }
 
 h1 {
     font-size: 1rem;
+    font-weight: 500;
 }
 
 .carteInput {
@@ -74,6 +84,61 @@ h1 {
     background-color: var(--grey);
     border-radius: 5px;
     padding: 10px;
-    max-width: 50%;
+    max-width: 100%;
     overflow: auto;
+}
+
+.livreBoutonCarte > button {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+
+}
+.livreBoutonCarte > button:hover {
+    background-color: black;
+    color: white;
+    transition: 0.5s;
+    font-weight: bold;
+}
+
+.livreBoutonCarte > button:active {
+    transition: 0s;
+    background-color: red;
+    color: white;
+}
+
+
+.livreBoutonCarte > button:hover {
+  box-shadow:
+    inset -2px -2px 3px rgb(255 255 255 / 0.6),
+    inset 2px 2px 3px rgb(0 0 0 / 0.6);
+}
+
+.livreBoutonCarte {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    grid-row: 5 / 6;
+    grid-column: 1 / 2;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.livreInfoCarte {
+    grid-row: 1 / 5;
+    overflow: auto;
+}
+
+.livreCover {
+    grid-column: 2 / 3;
+    grid-row: 2 / 6;
+    background-image: url("./cover/seigneur_des_anneaux.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+}
+
+.checkBox {
+    display: flex;
+    flex-direction: row-reverse;
 }
