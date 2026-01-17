@@ -42,22 +42,13 @@ class Carte {
     this.nodeParent = document.querySelector("main > div")
   }
 
-    creerSectionInfo = function (className, nomLabel, bookPropertie) {
-    const elem = document.createElement("div");
-    elem.className = className;
-
-    const elemLabel = document.createElement("h1");
-    elemLabel.textContent = nomLabel;
-
-    const elemInput = document.createElement("div")
-    elemInput.className = "carteInput";
-    elemInput.textContent = bookPropertie;
-
-    elem.appendChild(elemLabel);
-    elem.appendChild(elemInput);
-
-    return elem;
+  #creerSectionInfo(className, label, value) {
+    const div = document.createElement("div");
+    div.className = className;
+    div.innerHTML = `<h1>${label}</h1><div class="carteInput">${value}</div>`;
+    return div;
   }
+
 
   CreerCarte() {
       
@@ -67,80 +58,56 @@ class Carte {
 
   const nodeInfo = document.createElement("div")
   nodeInfo.className = "livreInfoCarte";
-   // TITRE DIV
-  const sectionInfoTitre = this.creerSectionInfo("titreCarte", "Titre", this.titre);
-  // AUTHEUR DIV
-  const sectionInfoAutheur = this.creerSectionInfo("autheurCarte", "Autheur", this.autheur);
-  // ANNEE PUBLICATION DIV
-  const sectionInfoRelease = this.creerSectionInfo("releaseCarte", "Année publication", this.release);
-  // GENRE DIV
-  const sectionInfoGenre = this.creerSectionInfo("genreCarte", "Genre", this.genre);
 
-  nodeInfo.appendChild(sectionInfoTitre);
-  nodeInfo.appendChild(sectionInfoAutheur);
-  nodeInfo.appendChild(sectionInfoRelease);
-  nodeInfo.appendChild(sectionInfoGenre);
+ // tableau des infos à créer
+  const infos = [
+    { className: "titreCarte", label: "Titre", value: this.titre },
+    { className: "autheurCarte", label: "Auteur", value: this.autheur },
+    { className: "releaseCarte", label: "Année publication", value: this.release },
+    { className: "genreCarte", label: "Genre", value: this.genre },
+  ];
+
+  infos.forEach(info => {
+    const section = this.#creerSectionInfo(info.className, info.label, info.value);
+    nodeInfo.appendChild(section);
+  });
   
+  // DIV bouton et checkbox
+  const nodeBouton = this.creerBoutonEtCheckbox();
+
+  // DIV cover
+  const nodeLivreCover = document.createElement('div');
+  nodeLivreCover.className = "livreCover";
+
+  // Carte finale
+  this.node.className = "livreCarte";
+  [nodeInfo, nodeBouton, nodeLivreCover].forEach(n => this.node.appendChild(n));
+  this.node.setAttribute("id", this.id);
+  this.nodeParent.appendChild(this.node);
+}
   /*-------------------------------------------------------------------------------------
   -------------------------------------------------------------------------------------*/
 
-  /*####################
-  # DIV BOUTON DU BAS  #
-  ####################*/
+  creerBoutonEtCheckbox() {
+  const div = document.createElement("div");
+  div.className = "livreBoutonCarte";
 
-  const nodeBouton = document.createElement("div")
-  nodeBouton.className = "livreBoutonCarte";
-
-  // Bouton supprimer
   const bouton = document.createElement("button");
-  bouton.setAttribute("type", "button")
-  bouton.className = "buttonInput"
-  bouton.textContent = "Delete"
+  bouton.type = "button";
+  bouton.className = "buttonInput";
+  bouton.textContent = "Delete";
+  bouton.addEventListener("click", () => this.remove());
 
-  bouton.addEventListener("click", () => {
-  console.log(this); // Carte
-  this.remove();
-  });
+  const divCheckbox = document.createElement("div");
+  divCheckbox.className = "checkBox";
+  divCheckbox.innerHTML = `<input type="checkbox" id="id"><label for="id">Read:</label>`;
 
-  // checked boxe
-  const divCheckbox = document.createElement('div');
-  divCheckbox.className = "checkBox"
-  
-  const checkbox= document.createElement('input');
-  checkbox.type = "checkbox";
-  checkbox.name = "name";
-  checkbox.value = "value";
-  checkbox.id = "id";
-  let label = document.createElement('label');
-  label.htmlFor = "id";
-  label.appendChild(document.createTextNode('Read:'));
-  divCheckbox.appendChild(checkbox);
-  divCheckbox.appendChild(label);
-
-  nodeBouton.appendChild(bouton);
-  nodeBouton.appendChild(divCheckbox);
-/*-------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------*/
-
-  /*####################
-  # DIV LIVRE COVER    #
-  ####################*/
-
-  const nodeLivreCover = document.createElement('div');
-  nodeLivreCover.className = "livreCover"
+  [bouton, divCheckbox].forEach(e => div.appendChild(e));
+  return div;
+}
 
 /*-------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------*/
-  
-  // CARTE FINALE
-  this.node.className = "livreCarte";
-  this.node.appendChild(nodeInfo);
-  this.node.appendChild(nodeBouton);
-  this.node.appendChild(nodeLivreCover);
-  this.node.setAttribute("id", this.id);
-  // Ajout de la carte sur l'affichage.
-  this.nodeParent.appendChild(this.node);
-  };
   
 remove() {
   this.node.remove();
