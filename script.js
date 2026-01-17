@@ -1,45 +1,66 @@
 const myLibrary = [];
 
-function Book(titre, autheur, release, genre) {
-  this.titre = titre;
-  this.autheur = autheur;
-  this.release = release;
-  this.genre = genre;
-  this.id = crypto.randomUUID();
-}
+class Book {
+  constructor(formInput) {
+    this.titre = formInput.titre;
+    this.autheur = formInput.autheur;
+    this.release = formInput.release;
+    this.genre = formInput.genre;
+    this.id = crypto.randomUUID();
+  }
 
-function addBookToLibrary(titre, autheur, release, genre) {
-  let newBook = new Book(titre, autheur, release, genre);
-  myLibrary.push(newBook);
-}
+  get getBook() {
+    return this;
+  }
 
-function formData() {
-  // Récupérer et stocker toutes les valeurs entrées par l'utilisateur.
-  this.titre = document.getElementById('titre').value;
-  this.autheur = document.getElementById('autheur').value;
-  this.release = document.getElementById('release').value;
-  this.genre = document.getElementById('genre').value;
-    // Reset de l'affichage d'ajout de livre.
-  this.reset = function () { 
-      document.querySelectorAll("form input[type='text']").forEach(input => input.value = '');
+  addBookToLibrary() {
+    myLibrary.push(this);
   }
 }
 
-function creerSectionCarte (className, nomLabel, bookPropertie) {
-  const elem = document.createElement("div");
-  elem.className = className;
+function getFormInput () {
+
+    titre = document.getElementById('titre').value;
+    autheur = document.getElementById('autheur').value;
+    release = document.getElementById('release').value;
+    genre = document.getElementById('genre').value;
+    reset = (() => { document.querySelectorAll("form input[type='text']").forEach(input => input.value = '') })();
+
+    return {titre, autheur, release, genre};
+
+}
+
+class Carte {
+  constructor(Book) {
+    this.titre = Book.titre
+    this.autheur = Book.autheur;
+    this.genre = Book.genre;
+    this.release = Book.release;
+    this.id = Book.id;
+
+    this.node = document.createElement("div");
+    this.nodeParent = document.querySelector("main > div")
+  }
+
+    creerSectionInfo = function (className, nomLabel, bookPropertie) {
+    const elem = document.createElement("div");
+    elem.className = className;
+
     const elemLabel = document.createElement("h1");
     elemLabel.textContent = nomLabel;
+
     const elemInput = document.createElement("div")
     elemInput.className = "carteInput";
     elemInput.textContent = bookPropertie;
-  elem.appendChild(elemLabel);
-  elem.appendChild(elemInput);
-  return elem;
-}
 
-function creationCarte (nodeParent) {
+    elem.appendChild(elemLabel);
+    elem.appendChild(elemInput);
 
+    return elem;
+  }
+
+  CreerCarte() {
+      
   /*##################
   #     DIV INFO     #
   ##################*/
@@ -47,18 +68,18 @@ function creationCarte (nodeParent) {
   const nodeInfo = document.createElement("div")
   nodeInfo.className = "livreInfoCarte";
    // TITRE DIV
-  const titreCarte = creerSectionCarte("titreCarte", "Titre", book.titre);
+  const sectionInfoTitre = this.creerSectionInfo("titreCarte", "Titre", this.titre);
   // AUTHEUR DIV
-  const autheurCarte = creerSectionCarte("autheurCarte", "Autheur", book.autheur);
+  const sectionInfoAutheur = this.creerSectionInfo("autheurCarte", "Autheur", this.autheur);
   // ANNEE PUBLICATION DIV
-  const releaseCarte = creerSectionCarte("releaseCarte", "Année publication", book.release);
+  const sectionInfoRelease = this.creerSectionInfo("releaseCarte", "Année publication", this.release);
   // GENRE DIV
-  const genreCarte = creerSectionCarte("genreCarte", "Genre", book.genre);
+  const sectionInfoGenre = this.creerSectionInfo("genreCarte", "Genre", this.genre);
 
-  nodeInfo.appendChild(titreCarte);
-  nodeInfo.appendChild(autheurCarte);
-  nodeInfo.appendChild(releaseCarte);
-  nodeInfo.appendChild(genreCarte);
+  nodeInfo.appendChild(sectionInfoTitre);
+  nodeInfo.appendChild(sectionInfoAutheur);
+  nodeInfo.appendChild(sectionInfoRelease);
+  nodeInfo.appendChild(sectionInfoGenre);
   
   /*-------------------------------------------------------------------------------------
   -------------------------------------------------------------------------------------*/
@@ -75,6 +96,11 @@ function creationCarte (nodeParent) {
   bouton.setAttribute("type", "button")
   bouton.className = "buttonInput"
   bouton.textContent = "Delete"
+
+  bouton.addEventListener("click", () => {
+  console.log(this); // Carte
+  this.remove();
+  });
 
   // checked boxe
   const divCheckbox = document.createElement('div');
@@ -107,54 +133,30 @@ function creationCarte (nodeParent) {
 -------------------------------------------------------------------------------------*/
   
   // CARTE FINALE
-  const node = document.createElement("div");
-  node.className = "livreCarte";
-  node.appendChild(nodeInfo);
-  node.appendChild(nodeBouton);
-  node.appendChild(nodeLivreCover);
-  node.setAttribute("id", book.id);
+  this.node.className = "livreCarte";
+  this.node.appendChild(nodeInfo);
+  this.node.appendChild(nodeBouton);
+  this.node.appendChild(nodeLivreCover);
+  this.node.setAttribute("id", this.id);
   // Ajout de la carte sur l'affichage.
-  nodeParent.appendChild(node);
+  this.nodeParent.appendChild(this.node);
+  };
+  
+remove() {
+  this.node.remove();
+  const index = myLibrary.findIndex(library => library.id == this.id);
+  myLibrary.splice(index, 1);
 }
-
-function afficherLivre() {
-  const main = document.querySelector("main > div");
-    for (book of myLibrary) {
-      // Ne pas réafficher les livres déja présents dans le DOM.
-      if (document.querySelector(`[id='${book.id}']`)) {
-        continue;
-      }
-      else {
-      // Si le livre n'est pas affiché, on créé sa div et on l'affiche dans main.
-        creationCarte(main);
-        // Supprimer le livre du DOM et de myLibrary si l'utilisateur appuie sur le bouton "Delete" du livre.
-        deleteButton = document.querySelectorAll('.buttonInput');
-        deleteButton.forEach(doc => doc.addEventListener('click', (event) => 
-        {
-          let livre = event.target.parentNode
-          const index = myLibrary.findIndex(library => library.id == livre.id)
-          myLibrary.splice(index, 1);
-          console.log(myLibrary);
-          event.target.parentNode.parentNode.remove();
-        }))
-
-      }
-    };
 };
-
-/* let deleteButton = document.querySelectorAll('.buttonInput');
-deleteButton.forEach((doc) => doc.addEventListener('click', () => {
-console.log("parent");
-})); */
-
-afficherLivre();
 
 // Détection d'ajout d'un livre par l'utilisateur.
 const formButton = document.getElementById('form_button');
 formButton.addEventListener("click", () => {
-  // Récupération des données du livre entrées par l'utilisateur.
-  let myFormData = new formData();
-  addBookToLibrary(myFormData.titre, myFormData.autheur, myFormData.release, myFormData.genre);
-  myFormData.reset();
-  afficherLivre();
+  const input = getFormInput();
+  const book = new Book(input);
+  book.addBookToLibrary();
+
+  const carte = new Carte(book);
+  carte.CreerCarte();
+
 });
